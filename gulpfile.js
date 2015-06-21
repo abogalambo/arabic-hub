@@ -9,22 +9,54 @@ var gulp        = require('gulp'),
     rename      = require('gulp-rename'),
     babel       = require('gulp-babel'),
     sourcemaps  = require('gulp-sourcemaps'),
-    mainBower   = require("main-bower-files");
+    mainBower   = require('main-bower-files'),
+    source      = require('vinyl-source-stream'),
+    buffer      = require('vinyl-buffer'),
+    browserify  = require('browserify'),
+    babelify    = require('babelify'),
+    debowerify  = require('debowerify');
 
-var lessFilter = gfilter('**/*.less');
+var lessFilter = gfilter('**/*.less'),
+    fontFilter = gfilter('**/*.{otf,eot,svg,ttf,woff,woff2}');
 
 gulp.task("bower", function(){
   return gulp.src(mainBower(), {base: "bower_components"})
     .pipe(gulp.dest('build/lib'));
 });
 
+gulp.task('build-font', function(){
+  return gulp.src(['bower_components/bootstrap/dist/fonts/**/*', 'bower_components/font-awesome/fonts/**/*'])
+    .pipe(fontFilter)
+    .pipe(gulp.dest('build/fonts'));
+});
+
 gulp.task('build-css', function(){
   return gulp.src(['client/stylesheets/**/*.less', 'client/stylesheets/**/*.css'])
     .pipe(lessFilter)
-    .pipe(less())
+    .pipe(less({
+      paths: [
+        "bower_components/bootstrap/less",
+        "bower_components/font-awesome/less"
+      ]
+    }))
     .pipe(lessFilter.restore())
     .pipe(concat('application.css'))
     .pipe(gulp.dest('build/css'));
+});
+
+gulp.task('browserify', function () {
+  var b = browserify({
+    entries: 'client/javascripts/application.js',
+    debug: true
+  });
+
+  b.transform(debowerify);
+  b.transform(babelify);
+
+  return b.bundle()
+    .pipe(source('application.js'))
+    .pipe(buffer())
+    .pipe(gulp.dest('build/js'));
 });
 
 gulp.task('build-js', function(){
