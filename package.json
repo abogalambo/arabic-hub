@@ -37,5 +37,8 @@
     "vinyl-transform": "^1.0.0"
   },
   "author": "Moustafa Badawy",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "q": "^1.4.1"
+  }
 }
