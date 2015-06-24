@@ -1,7 +1,7 @@
 {
-  "name": "gulp-starter",
+  "name": "the-arabic-hub",
   "version": "1.0.0",
-  "description": "Gulp & Browserify starter",
+  "description": "",
   "repository": {
     "type": "git",
     "url": ""
@@ -39,7 +39,7 @@
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0"
   },
-  "author": "Moustafa Badawy",
+  "author": "thedecimal",
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.0",
