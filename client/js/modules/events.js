@@ -1,5 +1,4 @@
-App.pubsub = {};
-
+var pubsub = {};
 (function(myObject) {
  
     // Storage for topics that can be broadcast
@@ -63,4 +62,6 @@ App.pubsub = {};
         }
         return this;
     };
-}( App.pubsub ));
+}(pubsub ));
+
+module.exports = pubsub;

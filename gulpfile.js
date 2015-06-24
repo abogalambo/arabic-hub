@@ -16,6 +16,7 @@ var gulp        = require('gulp'),
     babelify    = require('babelify'),
     debowerify  = require('debowerify'),
     gls         = require('gulp-live-server'),
+    reactify    = require('reactify'),
     imagemin    = require('gulp-imagemin');
     // pngquant    = require('imagemin-pngquant');
 
@@ -71,6 +72,7 @@ gulp.task('browserify', function () {
     debug: true
   });
 
+  b.transform(reactify);
   b.transform(debowerify);
   b.transform(babelify);
 
@@ -112,7 +114,7 @@ gulp.task('serve', ['build'], function() {
     server.start();
   });
 });
-
+ 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['browserify']);

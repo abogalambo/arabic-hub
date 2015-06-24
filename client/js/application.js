@@ -1,5 +1,5 @@
 // var $ = require('jquery');
-var factory = require('./modules/factory')
+var initReact = require('./jsx/components.jsx')
 var data = [
   {
     intro: 'Are you ready?',
@@ -53,4 +53,4 @@ var data = [
   }
 ];
 
-console.log(factory.createSlides(data));
+initReact(data);
