@@ -56,7 +56,7 @@ var factory = {
       answers.push(obj);
     }
 
-    return questions.mCquestion({
+    return questions.multipleChoice({
       question: questionBody,
       answers: answers,
       correctAnswer: answers[options.correctAnswer]
@@ -64,13 +64,13 @@ var factory = {
   },
 
   createAudio: function(file, obj){
-    var url= "/sounds/" + file;
+    var url= "assets/audio/" + file;
     var result = obj || constructor.create();
     return result.extend('audio',{audioURL:url});
   },
 
   createImage: function(file, obj){
-    var url= "/images/" + file;
+    var url= "assets/img/" + file;
     var result = obj || constructor.create();
     return result.extend('image', {imageURL:url});
   },
