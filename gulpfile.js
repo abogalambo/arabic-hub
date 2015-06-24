@@ -14,10 +14,21 @@ var gulp        = require('gulp'),
     buffer      = require('vinyl-buffer'),
     browserify  = require('browserify'),
     babelify    = require('babelify'),
-    debowerify  = require('debowerify');
+    debowerify  = require('debowerify'),
+    gls         = require('gulp-live-server'),
+    imagemin    = require('gulp-imagemin');
+    // pngquant    = require('imagemin-pngquant');
+
 
 var lessFilter = gfilter('**/*.less'),
     fontFilter = gfilter('**/*.{otf,eot,svg,ttf,woff,woff2}');
+
+var paths = {
+  scripts: 'client/js/**/*',
+  images: 'client/img/**/*',
+  stylesheets: ['client/stylesheets/**/*.less', 'client/stylesheets/**/*.css'],
+  fonts: ['bower_components/bootstrap/dist/fonts/**/*', 'bower_components/font-awesome/fonts/**/*']
+};
 
 gulp.task("bower", function(){
   return gulp.src(mainBower(), {base: "bower_components"})
@@ -25,13 +36,23 @@ gulp.task("bower", function(){
 });
 
 gulp.task('build-font', function(){
-  return gulp.src(['bower_components/bootstrap/dist/fonts/**/*', 'bower_components/font-awesome/fonts/**/*'])
+  return gulp.src(paths.fonts)
     .pipe(fontFilter)
     .pipe(gulp.dest('build/fonts'));
 });
 
+gulp.task('image-min', function(){
+  return gulp.src(paths.images)
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{removeViewBox: false}],
+      // use: [pngquant()]
+    }))
+    .pipe(gulp.dest('build/img'));
+});
+
 gulp.task('build-css', function(){
-  return gulp.src(['client/stylesheets/**/*.less', 'client/stylesheets/**/*.css'])
+  return gulp.src(paths.stylesheets)
     .pipe(lessFilter)
     .pipe(less({
       paths: [
@@ -46,7 +67,7 @@ gulp.task('build-css', function(){
 
 gulp.task('browserify', function () {
   var b = browserify({
-    entries: 'client/javascripts/application.js',
+    entries: 'client/js/application.js',
     debug: true
   });
 
@@ -59,16 +80,7 @@ gulp.task('browserify', function () {
     .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('build-js', function(){
-  return gulp.src(['client/javascripts/**/*.js'])
-    .pipe(sourcemaps.init())
-    .pipe(concat('application.js'))
-    .pipe(babel())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('build/js'));
-});
-
-gulp.task('package-js', ['build-js'], function(){
+gulp.task('package-js', ['browserify'], function(){
   return gulp.src('build/js/*.js')
   .pipe(uglify())
   .pipe(rename({suffix: '.min'}))
@@ -82,4 +94,31 @@ gulp.task('package-css', ['build-css'], function(){
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('package', ['package-js', 'package-css']);
+gulp.task('build', ['browserify', 'build-css', 'image-min']);
+gulp.task('package', ['package-js', 'package-css', 'image-min']);
+
+gulp.task('serve', ['build'], function() {
+  var server = gls('index.js', {env: {NODE_ENV: 'development', PORT: 3000}});
+  server.start();
+
+  //use gulp.watch to trigger server actions(notify, start or stop) 
+  gulp.watch('build/', function () {
+    server.notify.apply(server, arguments);
+  });
+
+  gulp.watch('index.js', function(){
+    //restart my server
+    server.stop();
+    server.start();
+  });
+});
+
+// Rerun the task when a file changes
+gulp.task('watch', function() {
+  gulp.watch(paths.scripts, ['browserify']);
+  gulp.watch(paths.images, ['image-min']);
+  gulp.watch(paths.stylesheets, ['build-css']);
+  gulp.watch(paths.fonts, ['build-font']);
+});
+
+gulp.task('default', ['watch', 'serve']);
