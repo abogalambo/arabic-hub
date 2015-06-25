@@ -3,50 +3,45 @@ var initReact = require('./jsx/components.jsx')
 var data = [
   {
     intro: 'Are you ready?',
-    audio: 'sound3.wav'
+    audio: 'intro.m4a'
   },{
     question: {
-      audio: "Aa.wav",
-      image: "alph/E.jpeg",
+      audio: "alph/Aa.m4a",
       images: [
-        "alph/E.jpeg",
-        "alph/A.jpg",
-        "alph/O.jpg",
+        "alph/E.png",
+        "alph/Ou.png",
+        "alph/baa.png",
         "alph/Aa.png"
       ],
       correctAnswer: 3
     }
   },{
     question: {
-      text: "بَ",
-      sounds: [
-        "alph/ba.mp3",
-        "alph/ta.mp3",
-        "alph/tha.mp3",
-        "alph/na.mp3"
-      ],
+      audio: "alph/baa.m4a",
       images: [
-        "alph/E.jpeg",
-        "alph/A.jpg",
-        "alph/O.jpg",
-        "alph/Aa.png"
-      ],
-      texts: [
-      	"بَ",
-      	"بَ",
-      	"لاَ",
-      	"هاهاهاَ"
+        "alph/baa.png",
+        "alph/naa.png",
+        "alph/taa.png"
       ],
       correctAnswer: 0
     }
   },{
     question: {
-      text: "بَ",
+      audio: "alph/saa.m4a",
       images: [
-        "alph/ba.mp3",
-        "alph/ta.mp3",
-        "alph/tha.mp3",
-        "alph/na.mp3"
+        "alph/s_aa.png",
+        "alph/saa.png",
+        "alph/shaa.png"
+      ],
+      correctAnswer: 1
+    }
+  },{
+    question: {
+      text: "بَ",
+      sounds: [
+        "alph/ba.m4a",
+        "alph/be.m4a",
+        "alph/bu.m4a"
       ],
       correctAnswer: 0
     }

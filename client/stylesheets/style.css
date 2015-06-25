@@ -1,0 +1,48 @@
+/**{border: 1px solid;}*/
+/**{padding: 2px;}*/
+.hide-it{display: none;}
+/* pages css */
+body, #main-container{
+	overflow-x: hidden;
+}
+.page{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-transition:left 0.5s ease;
+    transition:left 0.5s ease;
+}
+.page>.row{
+	margin-left: 0px;
+	margin-right: 0px;
+	padding: 10px;
+}
+
+.flex{
+	padding: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: warp;
+}
+
+.flex > *{
+  padding: 10px;
+  background: tomato;
+  border: 3px solid rgba(0,0,0,.2);
+  line-height: 100px;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+}
+
+.answer-image{
+	height: 100px;
+}
+
+.element{
+	margin: 20px;
+	width: 200px;
+}

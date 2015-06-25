@@ -64,7 +64,7 @@ var factory = {
   },
 
   createAudio: function(file, obj){
-    var url= "assets/audio/" + file;
+    var url= "/audio/" + file;
     var result = obj || constructor.create();
     return result.extend('audio',{audioURL:url});
   },
