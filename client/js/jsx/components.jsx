@@ -6,6 +6,7 @@ var initReact = function(data){
   var Quiz = React.createClass({
     getInitialState: function() {
       return {
+        loaded: false,
         slides: [],
         current: 0,
         max: 0
@@ -34,12 +35,6 @@ var initReact = function(data){
       // if(this.currentDir == 'ltr') multiplier = -1;
       return {left: 100 * multiplier * (this.state.current - index) + "%"}
     },
-    setSlides:function(slides){
-      this.setState({slides: slides});
-      if(slides.length > 0){
-        slides[0].focus();
-      }
-    },
     checkAnswer: function(question,answer){
       if(question.checkAnswer(answer)){
         alert('correct');
@@ -63,13 +58,18 @@ var initReact = function(data){
       });
 
       document.onkeydown = function(e){
-        pubsub.trigger('action:key-down', e);
+        if(_this.state.loaded){
+          pubsub.trigger('action:key-down', e);
+        }
       }
-      pubsub.subscribe('action:key-down', this.handleKeyDown.bind(this));
+      pubsub.subscribe('action:key-down', this.handleKeyDown);
 
       var slides = factory.createSlides(data);
       assetLoader.load().then(function(){
-        this.setSlides(slides);
+        this.setState({slides: slides, loaded: true})
+        if(slides.length > 0){
+          slides[0].focus();
+        }
       }.bind(this), console.error);
     },
     handleKeyDown: function(e){
@@ -81,19 +81,27 @@ var initReact = function(data){
     },
     render: function() {
       var _this = this;
-      var slides = this.state.slides.map(function(slide, index){
-        return (
-          <div className='page' style={_this.computeStyle(index)}>
-            <Slide slide={slide} />
-          </div>
-        );
-      });
+      var content = "";
+      if(this.state.loaded){
+        content = this.state.slides.map(function(slide, index){
+          return (
+            <div className='page' style={_this.computeStyle(index)}>
+              <Slide slide={slide} />
+            </div>
+          );
+        });
+      }else{
+        content = (
+          <Progressbar />
+        )
+      }
 
       return (
         <div className="quiz container-fluid text-center">
-          {slides}
+          {content}
         </div>
       );
+      
     }
   });
 
@@ -125,6 +133,31 @@ var initReact = function(data){
       );
     }
   });
+
+  var Progressbar = React.createClass({
+    getInitialState: function() {
+      return {
+        progress: 0
+      };
+    },
+    componentDidMount: function(){
+      var _this = this;
+      pubsub.subscribe('asset_loader:resource_loaded', function(loaded, total){
+        var progress = (loaded / total) * 100
+        _this.setState({progress: Math.floor(progress)});
+      });
+    },
+    render: function(){
+      var barStyle = {minWidth: '2em', width: this.state.progress + '%'};
+      return (
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={this.state.progress} aria-valuemin="0" aria-valuemax="100" style={barStyle}>
+            {this.state.progress + '%'}
+          </div>
+        </div>
+      )
+    }
+  })
 
   var Question = React.createClass({
     answerWith: function(answer){

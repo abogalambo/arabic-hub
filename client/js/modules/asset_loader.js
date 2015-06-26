@@ -1,5 +1,7 @@
 var q = require('q');
+var pubsub = require('./events')
 var promises = [];
+var loaded = 0;
 
 function loadAudio(url){
   // Load buffer asynchronously
@@ -58,6 +60,10 @@ var assetLoader = {
     }else if(type == "image"){
       promise = loadImage(url);
     }
+    promise.then(function(){
+      loaded ++;
+      pubsub.trigger('asset_loader:resource_loaded', loaded, promises.length);
+    });
     promises.push(promise);
     return promise;
   },
