@@ -1,11 +1,17 @@
 var express = require('express')
 var path = require('path')
+var slow = require('connect-slow');
 
 var app = express()
-// console.log('hahaha')
-// console.log(path.join(__dirname, 'static'))
 app.use(express.static(path.join(__dirname, 'public')))
+if(process.env['NODE_ENV'] == 'development'){
+	app.use(slow())
+}
 app.use('/assets',  express.static(__dirname + '/build'));
 
 var port = (process && process.env && process.env.PORT) || 3000;
 app.listen(port)
+
+process.on("uncaughtException", function (err) {
+	process.exit(1);
+});
