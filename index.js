@@ -1,10 +1,10 @@
 var express = require('express')
 var path = require('path')
-var slow = require('connect-slow');
 
 var app = express()
 app.use(express.static(path.join(__dirname, 'public')))
 if(process.env['NODE_ENV'] == 'development'){
+	var slow = require('connect-slow')
 	app.use(slow())
 }
 app.use('/assets',  express.static(__dirname + '/build'));
