@@ -1,7 +1,9 @@
 var q = require('q');
-var pubsub = require('./events')
+var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
 var promises = [];
 var loaded = 0;
+var LOADED_EVENT = 'AssetLoader:ResourceLoaded';
 
 function loadAudio(url){
   // Load buffer asynchronously
@@ -52,9 +54,10 @@ function loadImage(url){
 }
 
 // asset loader public API
-var assetLoader = {
+var assetLoader = assign({}, EventEmitter.prototype, {
   addAsset: function(url, type){
     var promise;
+    var _this = this;
     if(type == 'audio'){
       promise = loadAudio(url);
     }else if(type == "image"){
@@ -62,15 +65,19 @@ var assetLoader = {
     }
     promise.then(function(){
       loaded ++;
-      pubsub.trigger('asset_loader:resource_loaded', loaded, promises.length);
+      _this.emit(LOADED_EVENT, loaded, promises.length);
     });
     promises.push(promise);
     return promise;
   },
 
+  listenToLoad: function(callback){
+    this.on(LOADED_EVENT, callback);
+  },
+
   load: function(){
     return q.allSettled(promises)
   }
-};
+});
 
 module.exports = assetLoader;

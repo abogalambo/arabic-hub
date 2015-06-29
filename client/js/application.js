@@ -1,5 +1,6 @@
 // var $ = require('jquery');
-var initReact = require('./jsx/components.jsx')
+var initReact = require('./components/components.jsx')
+var quizActions = require('./actions/quiz_actions')
 var data = [
   {
     intro: 'Are you ready?',
@@ -47,5 +48,5 @@ var data = [
     }
   }
 ];
-
-initReact(data);
+quizActions.init(data);
+initReact();

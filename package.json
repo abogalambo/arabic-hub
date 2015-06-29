@@ -47,7 +47,10 @@
   "author": "thedecimal",
   "license": "ISC",
   "dependencies": {
+    "events": "^1.0.2",
     "express": "^4.13.0",
+    "flux": "^2.0.3",
+    "object-assign": "^3.0.0",
     "page": "^1.6.3",
     "q": "^1.4.1",
     "react": "^0.13.3"
