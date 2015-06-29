@@ -74,12 +74,12 @@ function addMixins(mixins){
 
     var play = function(){
       load().then(function(){
-        require('./audio_context').then(function(context){
-          source = context.createBufferSource();     // creates a sound source
-          source.buffer = audio;                     // tell the source which sound to play
-          source.connect(context.destination);       // connect the source to the context's destination (the speakers)
-          source.start(0);                           // play the source now
-        });
+        return require('./audio_context');
+      }).then(function(context){
+        source = context.createBufferSource();     // creates a sound source
+        source.buffer = audio;                     // tell the source which sound to play
+        source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+        source.start(0);                           // play the source now
       }, console.error);
     }
     that.playAudio = play;
