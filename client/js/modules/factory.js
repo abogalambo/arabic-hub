@@ -70,7 +70,7 @@ var factory = {
   },
 
   createImage: function(file, obj){
-    var url= "assets/img/" + file;
+    var url= "/assets/img/" + file;
     var result = obj || constructor.create();
     return result.extend('image', {imageURL:url});
   },
