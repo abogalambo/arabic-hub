@@ -15,15 +15,17 @@ var _state = {
 }
 
 var goToSlide = function(index){
-  var slides = _state.slides;
-  var current = _state.current;
-  if(slides[current]){
-    slides[current].blur();
+  if(index <= _state.max && index >= 0){
+    var slides = _state.slides;
+    var current = _state.current;
+    if(slides[current]){
+      slides[current].blur();
+    }
+    if(slides[index]){
+      slides[index].focus();
+    }
+    _state.current = index;
   }
-  if(slides[index]){
-    slides[index].focus();
-  }
-  _state.current = index;
 }
 
 var answerQuestion = function(question,answer){
