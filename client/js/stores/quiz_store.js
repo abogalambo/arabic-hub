@@ -26,12 +26,8 @@ var goToSlide = function(index){
   _state.current = index;
 }
 
-var checkAnswer = function(question,answer){
-  if(question.checkAnswer(answer)){
-    alert('correct');
-  }else{
-    alert('wrong');
-  }
+var answerQuestion = function(question,answer){
+  question.answerWith(answer);
 }
 
 var init = function(data){
@@ -79,7 +75,7 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case 'Quiz:QuestionAnswered':
-      checkAnswer(action.question, action.answer);
+      answerQuestion(action.question, action.answer);
       QuizStore.emitChange();
       break;
 

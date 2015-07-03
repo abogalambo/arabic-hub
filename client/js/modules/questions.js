@@ -2,6 +2,7 @@ var mCquestion = function(options){
   options = options || {};
   var that = {};
   var correctAnswer = options.correctAnswer;
+  var chosenAnswer;
   that.isMultipleChoice = true;
   that.question = options.question;
   that.answers = options.answers || [];
@@ -15,11 +16,23 @@ var mCquestion = function(options){
       this.question.stopAudio();
     }
   }
+  that.isAnswered = function(){
+    return chosenAnswer != undefined;
+  }
 
-  var checkAnswer = function(answer){
+  that.getChosenAnswer = function(){
+    return chosenAnswer;
+  }
+
+  that.checkAnswer = function(answer){
     return correctAnswer === answer;
   }
-  that.checkAnswer = checkAnswer;
+
+  that.answerWith = function(answer){
+    if(!this.isAnswered()){
+      chosenAnswer = answer;
+    }
+  }
   return that;
 }
 

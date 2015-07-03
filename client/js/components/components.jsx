@@ -21,7 +21,6 @@ var initReact = function(){
       });
 
       document.onkeydown = function(e){
-        // TODO use flux
         if(_this.state.loaded){
           _this.handleKeyDown(e)
         }
@@ -46,9 +45,11 @@ var initReact = function(){
     render: function() {
       var _this = this;
       var answerCallback = function(){
-        if(_this.state.current != _this.state.max){
-          router.goTo('/slides/' + (_this.state.current + 2));
-        }
+        setTimeout(function(){
+          if(_this.state.current != _this.state.max){
+            router.goTo('/slides/' + (_this.state.current + 2));
+          }
+        }, 700);
       }
       var content = "";
       if(this.state.loaded){
@@ -115,20 +116,23 @@ var initReact = function(){
   var Question = React.createClass({
     answerWith: function(answer){
       var question = this.props.question
-      quizActions.questionAnswered(question, answer);
-      if(this.props.answerCallback){
-        this.props.answerCallback();
+      if(!question.isAnswered()){
+        quizActions.questionAnswered(question, answer);
+        if(this.props.answerCallback){
+          this.props.answerCallback();
+        }
       }
     },
     render: function() {
-      var question = this.props.question
+      var question = this.props.question;
       var _this = this;
       var answers = question.answers.map(function(a){
         return(
-          <div>
-            <Element el={a} />
-            <div onClick={_this.answerWith.bind(_this, a)}> Pick this </div>
-          </div>
+            <Answer obj={a} 
+              callback={_this.answerWith.bind(_this, a)}
+              answered={question.isAnswered()}
+              chosen={question.getChosenAnswer() == a}
+              correct={question.checkAnswer(a)} />
         );
       });
       return (
@@ -144,9 +148,38 @@ var initReact = function(){
     }
   });
 
+  var Answer = React.createClass({
+    render: function(){
+      var style = {};
+      var discloseText = '';
+      if(this.props.answered){
+        if(this.props.chosen){
+          style.border = '5px solid blue'
+        }
+        var discloseContent = ''
+        if(this.props.correct){
+          discloseText = (
+            <div>✓</div>
+          )
+        }else{
+          discloseText = (
+            <div>✖</div>
+          )
+        }
+      }
+      return(
+        <div onClick={this.props.callback} style={style}>
+          <Element el={this.props.obj} />
+          {discloseText}
+        </div>
+      );
+    }
+  });
+
   var Element = React.createClass({
-    play: function(){
+    play: function(e){
       this.props.el.playAudio();
+      e.stopPropagation();
     },
     render: function() {
       var contents = [];
