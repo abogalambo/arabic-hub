@@ -1,15 +1,10 @@
 var AppDispatcher = require('../dispatcher');
 
 var QuizActions = {
-  nextSlide: function() {
+  goToSlide: function(index){
     AppDispatcher.dispatch({
-      actionType: 'Quiz:NextSlide'
-    });
-  },
-
-  prevSlide: function() {
-    AppDispatcher.dispatch({
-      actionType: 'Quiz:PrevSlide'
+      actionType: 'Quiz:goToSlide',
+      slideIndex: index
     });
   },
 

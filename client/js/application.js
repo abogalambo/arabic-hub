@@ -1,4 +1,3 @@
-// var $ = require('jquery');
 var initReact = require('./components/components.jsx')
 var quizActions = require('./actions/quiz_actions')
 var data = [

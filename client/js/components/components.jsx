@@ -1,6 +1,7 @@
 var React = require('react')
 var quizStore = require('../stores/quiz_store')
 var quizActions = require('../actions/quiz_actions')
+var router = require('../modules/router')
 
 var initReact = function(){
   var Quiz = React.createClass({
@@ -26,21 +27,35 @@ var initReact = function(){
         }
       }
     },
+    componentDidUpdate: function(prevProps, prevState){
+      if(this.state.loaded && !prevState.loaded){
+        router.goTo(window.location.hash.slice(2) || '/slides/1');
+      }
+    },
     handleKeyDown: function(e){
       if(e.which == 39){
-        quizActions.prevSlide();
+        if(this.state.current != 0){
+          router.goTo('/slides/' + (this.state.current));
+        }
       }else if(e.which == 37 || e.which == 32){
-        quizActions.nextSlide();
+        if(this.state.current != this.state.max){
+          router.goTo('/slides/' + (this.state.current + 2));
+        }
       }
     },
     render: function() {
       var _this = this;
+      var answerCallback = function(){
+        if(_this.state.current != _this.state.max){
+          router.goTo('/slides/' + (_this.state.current + 2));
+        }
+      }
       var content = "";
       if(this.state.loaded){
         content = this.state.slides.map(function(slide, index){
           return (
             <div className='page' style={_this.computeStyle(index)}>
-              <Slide slide={slide} />
+              <Slide slide={slide} answerCallback={answerCallback}/>
             </div>
           );
         });
@@ -72,7 +87,7 @@ var initReact = function(){
         )
       }else if(slide.isQuestionSlide){
         slideContent = (
-          <Question question={slide.question} />
+          <Question question={slide.question} answerCallback={this.props.answerCallback} />
         )
       }
       return (
@@ -101,6 +116,9 @@ var initReact = function(){
     answerWith: function(answer){
       var question = this.props.question
       quizActions.questionAnswered(question, answer);
+      if(this.props.answerCallback){
+        this.props.answerCallback();
+      }
     },
     render: function() {
       var question = this.props.question

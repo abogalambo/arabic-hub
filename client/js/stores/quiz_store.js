@@ -9,32 +9,21 @@ var CHANGE_EVENT = 'Quiz:Change';
 var _state = {
   loaded: false,
   slides: [],
-  current: 0,
+  current: 0, // zero-based index of the current slide
   max: 0,
   loadProgress: 0
 }
 
-var nextSlide = function(){
-  var slides = _state.slides
-  var current = _state.current
-  if(current < _state.max || !slides[current].isQuestionSlide){
-    if((current + 1) < slides.length){
-      slides[current].blur();
-      slides[current + 1].focus();
-      _state.current = current + 1;
-      _state.max = Math.max(_state.max, current + 1);
-    }
-  }
-}
-
-var prevSlide = function(){
-  var slides = _state.slides
-  var current = _state.current
-  if((current - 1) >= 0){
+var goToSlide = function(index){
+  var slides = _state.slides;
+  var current = _state.current;
+  if(slides[current]){
     slides[current].blur();
-    slides[current - 1].focus();
-    _state.current = current - 1;
   }
+  if(slides[index]){
+    slides[index].focus();
+  }
+  _state.current = index;
 }
 
 var checkAnswer = function(question,answer){
@@ -43,20 +32,15 @@ var checkAnswer = function(question,answer){
   }else{
     alert('wrong');
   }
-  if(_state.current < _state.slides.length){
-    _state.max = _state.max + 1;
-  }
 }
 
 var init = function(data){
   var slides = factory.createSlides(data);
   assetLoader.load().then(function(){
     _state.slides = slides;
+    _state.max = Math.max(slides.length - 1, 0);
     _state.loaded = true;
     QuizStore.emitChange();
-    if(slides.length > 0){
-      slides[0].focus();
-    }
   }, console.error);
   // TODO handle error in loading
   assetLoader.listenToLoad(function(loaded, total){
@@ -94,19 +78,13 @@ var QuizStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
-    case 'Quiz:NextSlide':
-      nextSlide();
-      QuizStore.emitChange();
-      break;
-
-    case 'Quiz:PrevSlide':
-      prevSlide();
-      QuizStore.emitChange();
-      break;
-
     case 'Quiz:QuestionAnswered':
       checkAnswer(action.question, action.answer);
-      nextSlide();
+      QuizStore.emitChange();
+      break;
+
+    case 'Quiz:goToSlide':
+      goToSlide(action.slideIndex);
       QuizStore.emitChange();
       break;
 
