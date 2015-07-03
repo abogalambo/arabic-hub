@@ -139,7 +139,7 @@ gulp.task('package-css', ['build-css'], function(){
 gulp.task('build', ['browserify', 'build-css', 'image-min', 'build-fonts']);
 
 gulp.task('serve', ['build'], function() {
-  var server = gls('index.js', {env: {NODE_ENV: 'production', PORT: 3000}});
+  var server = gls('index.js', {env: {NODE_ENV: 'development', PORT: 3000}});
   server.start();
 
   //use gulp.watch to trigger server actions(notify, start or stop) 
