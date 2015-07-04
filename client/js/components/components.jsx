@@ -80,10 +80,17 @@ var initReact = function(){
       var slide = this.props.slide;
       var slideContent;
       if(slide.isIntroSlide){
+        var imageTag;
+        if(slide.image){
+          imageTag = (
+            <img width="500px;" src={slide.image.imageURL} />
+          )
+        }
         slideContent = (
           <div>
-            {slide.intro}
             <Element el={slide.audio} />
+            {imageTag}<br/>
+            {slide.intro}
           </div>
         )
       }else if(slide.isQuestionSlide){

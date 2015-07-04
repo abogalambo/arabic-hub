@@ -6,6 +6,7 @@ var data = [
     audio: 'take_skip_quiz.m4a'
   },{
     intro: 'Are you ready?',
+    image: 'sunshine.jpg',
     audio: 'intro.m4a'
   },{
     question: {

@@ -22,6 +22,9 @@ var factory = {
       if(options.audio){
         slideOptions.audio = this.createAudio(options.audio);
       }
+      if(options.image){
+        slideOptions.image = this.createImage(options.image);
+      }
       slide = slides.intro(slideOptions);
     }else if(options.question){
       var question = this.createQuestion(options.question)

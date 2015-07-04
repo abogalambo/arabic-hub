@@ -10,6 +10,7 @@ var introSlide = function(options){
   that.isIntroSlide = true
   that.intro = options.intro;
   that.audio = options.audio;
+  that.image = options.image;
   that.focus = function(){
     if(this.audio){
       this.audio.playAudio();
