@@ -2,10 +2,11 @@ var initReact = require('./components/components.jsx')
 var quizActions = require('./actions/quiz_actions')
 var data = [
   {
+    documentUrl: "/embedded_pages/take_skip_quiz.html",
+    audio: 'take_skip_quiz.m4a'
+  },{
     intro: 'Are you ready?',
     audio: 'intro.m4a'
-  },{
-    documentUrl: "/embedded_pages/take_skip_quiz.html"
   },{
     question: {
       audio: "alph/Aa.m4a",
@@ -47,6 +48,9 @@ var data = [
       ],
       correctAnswer: 0
     }
+  },{
+    documentUrl: "http://qutrub.arabeyes.org/",
+    audio: 'qutrub_intro.m4a'
   }
 ];
 quizActions.init(data);

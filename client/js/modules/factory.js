@@ -27,7 +27,13 @@ var factory = {
       var question = this.createQuestion(options.question)
       slide = slides.question(question);
     }else if(options.documentUrl){
-      slide = slides.html(options.documentUrl);
+      var opts = {
+        documentUrl: options.documentUrl
+      }
+      if(options.audio){
+        opts.audio = this.createAudio(options.audio);
+      }
+      slide = slides.html(opts);
     }
     return slide;
   },

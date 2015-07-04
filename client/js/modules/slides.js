@@ -35,10 +35,19 @@ var questionSlide = function(q){
   return that;
 }
 
-var htmlSlide = function(documentUrl){
+var htmlSlide = function(options){
   var that = slide();
   that.isHtmlSlide = true;
-  that.documentUrl = documentUrl;
+  that.documentUrl = options.documentUrl;
+  that.audio = options.audio;
+  that.focus = function(){
+    if(this.audio)
+      this.audio.playAudio();
+  }
+  that.blur = function(){
+    if(this.audio)
+      this.audio.stopAudio();
+  }
   return that;
 }
 

@@ -96,7 +96,7 @@ var initReact = function(){
           height: '100%'
         }
         slideContent = (
-          <iframe style={style} src={slide.documentUrl} seamless="seamless"></iframe>
+          <iframe style={style} src={slide.documentUrl} seamless="seamless" frameBorder="0" width="100%"></iframe>
         )
       }
       return (
