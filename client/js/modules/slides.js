@@ -35,7 +35,15 @@ var questionSlide = function(q){
   return that;
 }
 
+var htmlSlide = function(documentUrl){
+  var that = slide();
+  that.isHtmlSlide = true;
+  that.documentUrl = documentUrl;
+  return that;
+}
+
 module.exports = {
   intro: introSlide,
-  question: questionSlide
+  question: questionSlide,
+  html: htmlSlide
 }

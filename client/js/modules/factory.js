@@ -26,6 +26,8 @@ var factory = {
     }else if(options.question){
       var question = this.createQuestion(options.question)
       slide = slides.question(question);
+    }else if(options.documentUrl){
+      slide = slides.html(options.documentUrl);
     }
     return slide;
   },

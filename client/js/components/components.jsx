@@ -90,6 +90,14 @@ var initReact = function(){
         slideContent = (
           <Question question={slide.question} answerCallback={this.props.answerCallback} />
         )
+      }else if(slide.isHtmlSlide){
+        var style = {
+          width: '100%',
+          height: '100%'
+        }
+        slideContent = (
+          <iframe style={style} src={slide.documentUrl} seamless="seamless"></iframe>
+        )
       }
       return (
         <div className="slide">
