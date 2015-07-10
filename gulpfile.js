@@ -58,9 +58,6 @@ gulp.task('clean-css', function(cb) {
 gulp.task('clean-img', function(cb) {
   del([config.img.dist], cb);
 });
-gulp.task('clean-fonts', function(cb) {
-  del([config.fonts.dist], cb);
-});
 
 gulp.task('browserify', ['clean-js'], function() {
   var bundler = browserify(config.js.bundle);
@@ -98,13 +95,6 @@ gulp.task('lint', function(){
     .pipe(eslint.format())
 });
 
-// -------------------------------
-gulp.task('build-fonts', ['clean-fonts'], function(){
-  return gulp.src(config.fonts.src)
-    .pipe(fontFilter)
-    .pipe(gulp.dest(config.fonts.dist));
-});
-
 gulp.task('image-min', ['clean-img'], function(){
   return gulp.src(config.img.src)
     .pipe(imagemin({
@@ -117,14 +107,14 @@ gulp.task('image-min', ['clean-img'], function(){
 
 gulp.task('build-css', ['clean-css'],function(){
   return gulp.src(config.css.src)
-    .pipe(lessFilter)
-    .pipe(less({
-      paths: [
-        "bower_components/bootstrap/less",
-        "bower_components/font-awesome/less"
-      ]
-    }))
-    .pipe(lessFilter.restore())
+    // .pipe(lessFilter)
+    // .pipe(less({
+    //   paths: [
+    //     "bower_components/bootstrap/less",
+    //     "bower_components/font-awesome/less"
+    //   ]
+    // }))
+    // .pipe(lessFilter.restore())
     .pipe(concat('application.css'))
     .pipe(gulp.dest(config.css.dist));
 });
@@ -136,7 +126,7 @@ gulp.task('package-css', ['build-css'], function(){
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('build', ['browserify', 'build-css', 'image-min', 'build-fonts']);
+gulp.task('build', ['browserify', 'build-css', 'image-min']);
 
 gulp.task('serve', ['build'], function() {
   var server = gls('index.js', {env: {NODE_ENV: 'development', PORT: 3000}});
@@ -158,7 +148,6 @@ gulp.task('serve', ['build'], function() {
 gulp.task('watch', ['watchify'],function() {
   gulp.watch(config.img.src, ['image-min']);
   gulp.watch(config.css.src, ['build-css']);
-  gulp.watch(config.fonts.src, ['build-fonts']);
 });
 
 gulp.task('default', ['watch', 'serve']);

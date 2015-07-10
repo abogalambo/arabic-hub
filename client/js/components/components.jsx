@@ -2,6 +2,7 @@ var React = require('react')
 var quizStore = require('../stores/quiz_store')
 var quizActions = require('../actions/quiz_actions')
 var router = require('../modules/router')
+var ch = componentHandler
 
 var initReact = function(){
   var Quiz = React.createClass({
@@ -28,6 +29,7 @@ var initReact = function(){
     },
     componentDidUpdate: function(prevProps, prevState){
       if(this.state.loaded && !prevState.loaded){
+        ch.upgradeAllRegistered()
         router.goTo(window.location.hash.slice(2) || '/slides/1');
       }
     },
@@ -117,12 +119,10 @@ var initReact = function(){
 
   var Progressbar = React.createClass({
     render: function(){
-      var barStyle = {minWidth: '2em', width: this.props.progress + '%'};
       return (
-        <div className="progress">
-          <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={this.props.progress} aria-valuemin="0" aria-valuemax="100" style={barStyle}>
-            {this.props.progress + '%'}
-          </div>
+        <div className="progress mdl-progress progress-demo">
+          <div className="progressbar bar bar1" style={{width: this.props.progress + '%'}}></div>
+          <div className="bufferbar bar bar2" style={{width: '100%'}}></div>
         </div>
       )
     }
@@ -213,7 +213,7 @@ var initReact = function(){
 
       if(el.hasAudio){
         contents.push(
-          <button onClick={this.play}>Play</button>
+          <button className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onClick={this.play}>Play</button>
         );
       }
 

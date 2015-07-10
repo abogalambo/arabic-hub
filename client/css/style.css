@@ -2,7 +2,7 @@
 /**{padding: 2px;}*/
 .hide-it{display: none;}
 /* pages css */
-body, #main-container{
+body, #root{
 	overflow-x: hidden;
 }
 .page{
@@ -11,11 +11,6 @@ body, #main-container{
 	height: 100%;
 	-webkit-transition:left 0.5s ease;
     transition:left 0.5s ease;
-}
-.page>.row{
-	margin-left: 0px;
-	margin-right: 0px;
-	padding: 10px;
 }
 
 .flex{
