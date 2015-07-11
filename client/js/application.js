@@ -5,7 +5,8 @@ var data = [
     documentUrl: "/embedded_pages/take_skip_quiz.html",
     audio: 'take_skip_quiz.m4a'
   },{
-    intro: 'Are you ready?',
+    intro: 'Are you ready? Hit the space button to start the quiz',
+    title: 'Welcome',
     image: 'sunshine.jpg',
     audio: 'intro.m4a'
   },{

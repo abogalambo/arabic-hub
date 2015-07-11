@@ -64,12 +64,16 @@ var initReact = function(){
         });
       }else{
         content = (
-          <Progressbar progress={this.state.loadProgress} />
+          <div className="page">
+            <div className="vertical-align-center">
+              <Progressbar progress={this.state.loadProgress} />
+            </div>
+          </div>
         )
       }
 
       return (
-        <div className="quiz container-fluid text-center">
+        <div className="quiz">
           {content}
         </div>
       );
@@ -82,17 +86,44 @@ var initReact = function(){
       var slide = this.props.slide;
       var slideContent;
       if(slide.isIntroSlide){
-        var imageTag;
+        var textContent = '';
+        var imageContent = '';
+        var audioPlayButton = '';
+
         if(slide.image){
-          imageTag = (
-            <img width="500px;" src={slide.image.imageURL} />
-          )
+          var imageStyle = {
+            background: 'url(' + slide.image.imageURL+ ') center/cover'
+          }
+          imageContent = (
+            <div className="mdl-card__title" style={imageStyle}>
+              <h2 className="mdl-card__title-text">{slide.title}</h2>
+            </div>
+          );
         }
+
+        if(slide.audio){
+          audioPlayButton = (
+            <div className="mdl-card__menu">
+              <button onClick={slide.audio.playAudio} className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i className="material-icons">play_arrow</i>
+              </button>
+            </div>
+          );
+        }
+
+        if(slide.intro){
+          textContent = (
+            <div className="mdl-card__supporting-text">
+              {slide.intro}
+            </div>
+          );
+        }
+
         slideContent = (
-          <div>
-            <Element el={slide.audio} />
-            {imageTag}<br/>
-            {slide.intro}
+          <div className="mdl-card mdl-shadow--2dp slide-card-wide vertical-align-center">
+            {imageContent}
+            {textContent}
+            {audioPlayButton}
           </div>
         )
       }else if(slide.isQuestionSlide){
@@ -108,21 +139,19 @@ var initReact = function(){
           <iframe style={style} src={slide.documentUrl} seamless="seamless" frameBorder="0" width="100%"></iframe>
         )
       }
-      return (
-        <div className="slide">
-          {slideContent}
-          <hr />
-        </div>
-      );
+      return slideContent;
     }
   });
 
   var Progressbar = React.createClass({
     render: function(){
       return (
-        <div className="progress mdl-progress progress-demo">
-          <div className="progressbar bar bar1" style={{width: this.props.progress + '%'}}></div>
-          <div className="bufferbar bar bar2" style={{width: '100%'}}></div>
+        <div className="progress">
+          <div className="mdl-progress">
+            <div className="progressbar bar bar1" style={{width: this.props.progress + '%'}}></div>
+            <div className="bufferbar bar bar2" style={{width: '100%'}}></div>
+          </div>
+          <span>{this.props.progress + '%'}</span>
         </div>
       )
     }

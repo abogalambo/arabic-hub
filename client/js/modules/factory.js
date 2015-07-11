@@ -19,6 +19,9 @@ var factory = {
       slideOptions = {
         intro: options.intro
       }
+      if(options.title){
+        slideOptions.title = options.title;
+      }
       if(options.audio){
         slideOptions.audio = this.createAudio(options.audio);
       }

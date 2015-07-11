@@ -9,6 +9,7 @@ var introSlide = function(options){
   var that = slide();
   that.isIntroSlide = true
   that.intro = options.intro;
+  that.title = options.title;
   that.audio = options.audio;
   that.image = options.image;
   that.focus = function(){
