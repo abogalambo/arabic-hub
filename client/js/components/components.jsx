@@ -58,7 +58,7 @@ var initReact = function(){
         content = this.state.slides.map(function(slide, index){
           return (
             <div className='page' style={_this.computeStyle(index)}>
-              <Slide slide={slide} answerCallback={answerCallback}/>
+              <Slide slide={slide} answerCallback={answerCallback} quizAssets={_this.state.quizAssets} />
             </div>
           );
         });
@@ -128,7 +128,7 @@ var initReact = function(){
         )
       }else if(slide.isQuestionSlide){
         slideContent = (
-          <Question question={slide.question} answerCallback={this.props.answerCallback} />
+          <Question question={slide.question} answerCallback={this.props.answerCallback} quizAssets={this.props.quizAssets} />
         )
       }else if(slide.isHtmlSlide){
         var style = {
@@ -174,6 +174,7 @@ var initReact = function(){
       var question = this.props.question;
       var _this = this;
       var cellsPerAnswer = this.cellsPerAnswer();
+      var character;
       var answers = question.answers.map(function(a){
         return(
             <Answer obj={a} 
@@ -184,10 +185,23 @@ var initReact = function(){
               cellsPerAnswer={cellsPerAnswer} />
         );
       });
+
+      if(question.isAnswered()){
+        var img;
+        if(question.isAnsweredCorrectly()){
+          img = this.props.quizAssets.characters.happy;
+        }else{
+          img = this.props.quizAssets.characters.sad;
+        }
+        character = (
+          <img className="character-image" src={img.imageURL} />
+        );
+      }
       return (
         <div className="question mdl-grid vertical-align-center" dir="rtl">
           <div className="question-body mdl-cell mdl-cell--2-col">
             <Element el={question.question} />
+            {character}
           </div>
 
           <div className="answers-list mdl-grid mdl-cell mdl-cell--10-col">
@@ -200,27 +214,21 @@ var initReact = function(){
 
   var Answer = React.createClass({
     render: function(){
-      var style = {};
-      var discloseText = '';
+      var classes = [];
+      classes.push("mdl-cell mdl-cell--" + (this.props.cellsPerAnswer || 4) + "-col");
       if(this.props.answered){
         if(this.props.chosen){
-          style.border = '5px solid blue'
+          classes.push('chosen');
         }
-        var discloseContent = ''
         if(this.props.correct){
-          discloseText = (
-            <div>✓</div>
-          )
-        }else{
-          discloseText = (
-            <div>✖</div>
-          )
+          classes.push('correct')
+        }else if(this.props.chosen){
+          classes.push('incorrect')
         }
       }
       return(
-        <div className={"mdl-cell mdl-cell--" + (this.props.cellsPerAnswer || 4) + "-col"} style={style}>
+        <div className={classes.join(' ')}>
           <Element el={this.props.obj} callback={this.props.callback} />
-          {discloseText}
         </div>
       );
     }

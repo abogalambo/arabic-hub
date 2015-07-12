@@ -9,6 +9,7 @@ var CHANGE_EVENT = 'Quiz:Change';
 var _state = {
   loaded: false,
   slides: [],
+  quizAssets: {},
   current: 0, // zero-based index of the current slide
   max: 0,
   loadProgress: 0
@@ -34,10 +35,12 @@ var answerQuestion = function(question,answer){
 
 var init = function(data){
   var slides = factory.createSlides(data);
+  var quizAssets = factory.createQuizAssets();
   assetLoader.load().then(function(){
     _state.slides = slides;
     _state.max = Math.max(slides.length - 1, 0);
     _state.loaded = true;
+    _state.quizAssets = quizAssets;
     QuizStore.emitChange();
   }, console.error);
   // TODO handle error in loading

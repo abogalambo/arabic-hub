@@ -28,6 +28,10 @@ var mCquestion = function(options){
     return correctAnswer === answer;
   }
 
+  that.isAnsweredCorrectly = function(){
+    return this.checkAnswer(chosenAnswer);
+  }
+
   that.answerWith = function(answer){
     if(!this.isAnswered()){
       chosenAnswer = answer;

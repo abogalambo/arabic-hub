@@ -3,6 +3,14 @@ var questions = require('./questions');
 var constructor = require('./objects');
 
 var factory = {
+  createQuizAssets: function(){
+    return {
+      characters: {
+        happy: this.createImage('characters/happy3.png'),
+        sad: this.createImage('characters/sad1.png'),
+      }
+    }
+  },
   createSlides: function(slides){
     var slideObjects = [];
     for(var i=0; i< slides.length; i++){
