@@ -86,7 +86,7 @@ function addMixins(mixins){
 
     var stop = function(){
       if(source){
-        source.stop();
+        source.stop(0);
       }
     }
     that.stopAudio = stop;

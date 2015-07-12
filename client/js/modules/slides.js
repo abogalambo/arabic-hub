@@ -18,8 +18,9 @@ var introSlide = function(options){
     }
   }
   that.blur = function(){
-    if(this.audio)
+    if(this.audio){
       this.audio.stopAudio();
+    }
   }
   return that;
 }
