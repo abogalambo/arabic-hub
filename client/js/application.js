@@ -12,6 +12,7 @@ var data = [
   },{
     question: {
       audio: "alph/Aa.m4a",
+      text: "Choose the word that matches this sound",
       images: [
         "alph/E.png",
         "alph/Ou.png",
@@ -23,6 +24,7 @@ var data = [
   },{
     question: {
       audio: "alph/baa.m4a",
+      text: "Choose the word that matches this sound",
       images: [
         "alph/baa.png",
         "alph/naa.png",
@@ -33,6 +35,7 @@ var data = [
   },{
     question: {
       audio: "alph/saa.m4a",
+      text: "Choose the word that matches this sound",
       images: [
         "alph/s_aa.png",
         "alph/saa.png",
@@ -42,7 +45,8 @@ var data = [
     }
   },{
     question: {
-      text: "بَ",
+      text: "Pick the sound that matches this word",
+      image: "alph/ba.png",
       sounds: [
         "alph/ba.m4a",
         "alph/be.m4a",

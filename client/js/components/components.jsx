@@ -167,24 +167,30 @@ var initReact = function(){
         }
       }
     },
+    cellsPerAnswer: function(){
+      return [12,12,6,4,6][this.props.question.answers.length] || 4
+    },
     render: function() {
       var question = this.props.question;
       var _this = this;
+      var cellsPerAnswer = this.cellsPerAnswer();
       var answers = question.answers.map(function(a){
         return(
             <Answer obj={a} 
               callback={_this.answerWith.bind(_this, a)}
               answered={question.isAnswered()}
               chosen={question.getChosenAnswer() == a}
-              correct={question.checkAnswer(a)} />
+              correct={question.checkAnswer(a)}
+              cellsPerAnswer={cellsPerAnswer} />
         );
       });
       return (
-        <div className="question">
-          <div className="question-body">
+        <div className="question mdl-grid vertical-align-center" dir="rtl">
+          <div className="question-body mdl-cell mdl-cell--2-col">
             <Element el={question.question} />
           </div>
-          <div className="answers-list flex">
+
+          <div className="answers-list mdl-grid mdl-cell mdl-cell--10-col">
             {answers}
           </div>
         </div>
@@ -212,8 +218,8 @@ var initReact = function(){
         }
       }
       return(
-        <div onClick={this.props.callback} style={style}>
-          <Element el={this.props.obj} />
+        <div className={"mdl-cell mdl-cell--" + (this.props.cellsPerAnswer || 4) + "-col"} style={style}>
+          <Element el={this.props.obj} callback={this.props.callback} />
           {discloseText}
         </div>
       );
@@ -228,26 +234,39 @@ var initReact = function(){
     render: function() {
       var contents = [];
       var el = this.props.el;
-      if(el.hasText){
+
+      var imageStyle;
+      if(el.hasImage){
+        imageStyle = {background: 'no-repeat url(' + el.imageURL + ') center/contain'}
+      }else if(this.props.callback && !this.props.hasText){
+        imageStyle = {background: 'no-repeat url(/assets/img/icons/choose_answer.png) center/50px'}
+      }
+      if(imageStyle){
         contents.push(
-          <div>{el.text}</div>
+          <div className="mdl-card__title mdl-card--border" style={imageStyle} onClick={this.props.callback}></div>
         );
       }
 
-      if(el.hasImage){
+      if(el.hasText){
         contents.push(
-          <img className='answer-image' src={el.imageURL} />
+          <div onClick={this.props.callback} className="mdl-card__supporting-text mdl-card--border">
+            <div>{el.text}</div>
+          </div>
         );
       }
 
       if(el.hasAudio){
         contents.push(
-          <button className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onClick={this.play}>Play</button>
+          <div onClick={this.play} className="mdl-card__actions mdl-card--border">
+            <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+              <i className="material-icons">play_arrow</i>
+            </button>
+          </div>
         );
       }
 
       return (
-        <div className="element flex">
+        <div className="object mdl-card mdl-shadow--2dp">
           {contents}
         </div>
       );

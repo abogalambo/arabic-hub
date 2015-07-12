@@ -47,11 +47,13 @@ var factory = {
   createQuestion: function(options){
     var questionBody;
     if(options.audio){
-      questionBody = this.createAudio(options.audio);
-    }else if(options.image){
-      questionBody = this.createImage(options.image);
-    }else if(options.text){
-      questionBody = this.createText(options.text);
+      questionBody = this.createAudio(options.audio, questionBody);
+    }
+    if(options.image){
+      questionBody = this.createImage(options.image, questionBody);
+    }
+    if(options.text){
+      questionBody = this.createText(options.text, questionBody);
     }
 
     var answers = [];
