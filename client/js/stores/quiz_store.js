@@ -1,8 +1,9 @@
 var AppDispatcher = require('../dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var assetLoader = require('../modules/asset_loader.js')
-var factory = require('../modules/factory')
+var assetLoader = require('../modules/asset_loader.js');
+var factory = require('../modules/factory');
+var q = require('q');
 
 var CHANGE_EVENT = 'Quiz:Change';
 
@@ -23,10 +24,22 @@ var goToSlide = function(index){
       slides[current].blur();
     }
     if(slides[index]){
-      slides[index].focus();
+      q.when(slides[index].focus(), function(){
+        QuizStore.emitChange();
+      });
     }
     _state.current = index;
   }
+}
+
+var playAudio = function(audio){
+    audio.playAudio().then(function(){
+      QuizStore.emitChange();
+    });
+}
+
+var stopAudio = function(audio){
+  audio.stopAudio();
 }
 
 var answerQuestion = function(question,answer){
@@ -47,7 +60,7 @@ var init = function(data){
   assetLoader.listenToLoad(function(loaded, total){
     var progress = (loaded / total) * 100;
     _state.loadProgress = Math.floor(progress);
-    QuizStore.emit(CHANGE_EVENT);
+    QuizStore.emitChange();
   });
 }
 
@@ -86,6 +99,15 @@ AppDispatcher.register(function(action) {
 
     case 'Quiz:goToSlide':
       goToSlide(action.slideIndex);
+      QuizStore.emitChange();
+      break;
+
+    case 'Quiz:toggleAudio':
+      if(action.audio.isPlaying()){
+        stopAudio(action.audio);
+      }else{
+        playAudio(action.audio);
+      }
       QuizStore.emitChange();
       break;
 

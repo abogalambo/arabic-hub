@@ -59,6 +59,8 @@ function addMixins(mixins){
     var source;
     var audio;
     var loadPromise;
+    var playingNow = false;
+    var AudioPlayer = require('./audio_player');
     that.audioURL = options.audioURL;
     that.hasAudio = true;
 
@@ -73,21 +75,23 @@ function addMixins(mixins){
     that.loadAudio = load;
 
     var play = function(){
-      load().then(function(){
-        return require('./audio_context');
-      }).then(function(context){
-        source = context.createBufferSource();     // creates a sound source
-        source.buffer = audio;                     // tell the source which sound to play
-        source.connect(context.destination);       // connect the source to the context's destination (the speakers)
-        source.start(0);                           // play the source now
-      }, console.error);
+      playingNow = true;
+      return load().then(function(){
+        return AudioPlayer.play(audio);
+      }).then(function(){
+        playingNow = false;
+      });
     }
     that.playAudio = play;
 
+    var isPlaying = function(){
+      return playingNow;
+    }
+    that.isPlaying = isPlaying;
+
     var stop = function(){
-      if(source){
-        source.stop(0);
-      }
+      AudioPlayer.stop(audio);
+      playingNow = false;
     }
     that.stopAudio = stop;
 

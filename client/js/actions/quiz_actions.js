@@ -16,6 +16,13 @@ var QuizActions = {
     });
   },
 
+  toggleAudio: function(audio){
+    AppDispatcher.dispatch({
+      actionType: 'Quiz:toggleAudio',
+      audio: audio
+    });
+  },
+
   init: function(data) {
     AppDispatcher.dispatch({
       actionType: 'Quiz:Init',

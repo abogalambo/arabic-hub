@@ -82,6 +82,9 @@ var initReact = function(){
   });
 
   var Slide = React.createClass({
+    toggleAudio: function(){
+      quizActions.toggleAudio(this.props.slide.audio);
+    },
     render: function() {
       var slide = this.props.slide;
       var slideContent;
@@ -104,8 +107,8 @@ var initReact = function(){
         if(slide.audio){
           audioPlayButton = (
             <div className="mdl-card__menu">
-              <button onClick={slide.audio.playAudio} className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i className="material-icons">play_arrow</i>
+              <button onClick={this.toggleAudio} className="mdl-button mdl-button--icon mdl-js-button">
+                <i className="material-icons">{slide.audio.isPlaying() ? 'pause' : 'play_arrow'}</i>
               </button>
             </div>
           );

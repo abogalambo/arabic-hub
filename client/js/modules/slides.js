@@ -14,7 +14,7 @@ var introSlide = function(options){
   that.image = options.image;
   that.focus = function(){
     if(this.audio){
-      this.audio.playAudio();
+      return this.audio.playAudio();
     }
   }
   that.blur = function(){
