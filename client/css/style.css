@@ -113,3 +113,85 @@ body, #root{
 .object .mdl-card__actions{
 	text-align: center;
 }
+
+/* ---------------------------- Slide Navigation ------------------------- */
+
+.slides-nav{
+	position: absolute;
+  	width: 100%;
+  	z-index: 100;
+}
+
+.slides-nav .overlay{
+	position: absolute;
+	background: rgba(0,0,0,0.3);
+	width: 100%;
+	height:35px;
+}
+
+.slides-nav ol{
+	margin-top: 5px;
+	text-align: center;
+	display: block;
+}
+
+li.node{
+    box-sizing: border-box;
+    height: 22px;
+    width: 22px;
+    border: 4px solid rgb(61, 133, 198);
+    border-radius: 50% 50% 50% 50%;
+    list-style: none outside none;
+    margin: 0px 20px 0px 0px;
+    position: relative;
+    display: inline-block;
+}
+
+li.node::before{
+	width: 20px;
+	height: 4px;
+	content: '';
+	pointer-events: none;
+	position: absolute;
+	left: calc(100% + 4px);
+	top: calc(50% - 2px);
+	background-color: rgb(61, 133, 198);
+}
+
+li.node a{
+	position: relative;
+  	bottom: 5px;
+  	color: #fff
+}
+
+li.node:first-child::before {
+	content: none;
+}
+
+li.done {
+	background: rgb(61, 133, 198) none repeat scroll 0% 0% / auto padding-box border-box;
+}
+
+li.done a{
+	color: #fff;
+	cursor: pointer;
+}
+
+li.current{
+	border: 4px solid #F1D511;
+	width: 28px;
+  	height: 28px;
+  	bottom: 3px;
+}
+
+li.current a{
+	cursor: pointer;
+	color: #F1D511;
+	bottom: 2px;
+}
+
+li.todo a{
+	color: rgb(61, 133, 198);
+	cursor: default;
+}
+/*---------------------------- End slide navigation ----------------------*/

@@ -144,8 +144,10 @@ var initReact = function initReact() {
           }
         }, 700);
       };
-      var content = '';
+      var content;
+      var navigation;
       if (this.state.loaded) {
+        navigation = React.createElement(SlidesNav, { slides: this.state.slides, current: this.state.current });
         content = this.state.slides.map(function (slide, index) {
           return React.createElement(
             'div',
@@ -168,6 +170,7 @@ var initReact = function initReact() {
       return React.createElement(
         'div',
         { className: 'quiz' },
+        navigation,
         content
       );
     }
@@ -401,6 +404,56 @@ var initReact = function initReact() {
         'div',
         { className: 'object mdl-card mdl-shadow--2dp' },
         contents
+      );
+    }
+  });
+
+  var SlidesNav = React.createClass({
+    displayName: 'SlidesNav',
+
+    canNavigateTo: function canNavigateTo(index) {
+      var slides = this.props.slides;
+      var current = this.props.current;
+      return index <= current || slides[current].isDone();
+    },
+    goTo: function goTo(index) {
+      if (this.canNavigateTo(index)) {
+        router.goTo('/slides/' + index);
+      }
+    },
+    render: function render() {
+      var _this = this;
+      var slides = this.props.slides;
+      var current = this.props.current;
+      var nodes = slides.map(function (slide, index) {
+        var classes = ['node'];
+        if (index === current) {
+          classes.push('current');
+        }
+        if (slide.isDone()) {
+          classes.push('done');
+        } else {
+          classes.push('todo');
+        }
+        return React.createElement(
+          'li',
+          { onClick: _this.goTo.bind(_this, index + 1), className: classes.join(' ') },
+          React.createElement(
+            'a',
+            null,
+            index + 1
+          )
+        );
+      });
+      return React.createElement(
+        'nav',
+        { className: 'slides-nav' },
+        React.createElement('div', { className: 'overlay' }),
+        React.createElement(
+          'ol',
+          { dir: 'rtl' },
+          nodes
+        )
       );
     }
   });
@@ -886,20 +939,26 @@ var slide = function slide() {
   var that = {};
   that.focus = function () {};
   that.blur = function () {};
+  that.isDone = function () {};
   return that;
 };
 
 var introSlide = function introSlide(options) {
   var that = slide();
+  var seen = false;
   that.isIntroSlide = true;
   that.intro = options.intro;
   that.title = options.title;
   that.audio = options.audio;
   that.image = options.image;
   that.focus = function () {
+    seen = true;
     if (this.audio) {
       return this.audio.playAudio();
     }
+  };
+  that.isDone = function () {
+    return seen;
   };
   that.blur = function () {
     if (this.audio) {
@@ -913,6 +972,9 @@ var questionSlide = function questionSlide(q) {
   var that = slide();
   that.isQuestionSlide = true;
   that.question = q;
+  that.isDone = function () {
+    return this.question.isAnswered();
+  };
   that.focus = function () {
     return this.question.focus();
   };
@@ -924,14 +986,19 @@ var questionSlide = function questionSlide(q) {
 
 var htmlSlide = function htmlSlide(options) {
   var that = slide();
+  var seen = false;
   that.isHtmlSlide = true;
   that.documentUrl = options.documentUrl;
   that.audio = options.audio;
   that.focus = function () {
+    seen = true;
     if (this.audio) this.audio.playAudio();
   };
   that.blur = function () {
     if (this.audio) this.audio.stopAudio();
+  };
+  that.isDone = function () {
+    return seen;
   };
   return that;
 };

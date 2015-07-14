@@ -53,8 +53,12 @@ var initReact = function(){
           }
         }, 700);
       }
-      var content = "";
+      var content;
+      var navigation;
       if(this.state.loaded){
+        navigation = (
+          <SlidesNav slides={this.state.slides} current={this.state.current} />
+        );
         content = this.state.slides.map(function(slide, index){
           return (
             <div className='page' style={_this.computeStyle(index)}>
@@ -74,6 +78,7 @@ var initReact = function(){
 
       return (
         <div className="quiz">
+          {navigation}
           {content}
         </div>
       );
@@ -281,6 +286,46 @@ var initReact = function(){
           {contents}
         </div>
       );
+    }
+  });
+
+  var SlidesNav = React.createClass({
+    canNavigateTo: function(index){
+      var slides = this.props.slides;
+      var current = this.props.current;
+      return index <= current || slides[current].isDone();
+    },
+    goTo: function(index){
+      if(this.canNavigateTo(index)){
+        router.goTo('/slides/' + index);
+      }
+    },
+    render: function(){
+      var _this = this;
+      var slides = this.props.slides;
+      var current = this.props.current;
+      var nodes = slides.map(function(slide, index){
+        var classes = ['node'];
+        if(index === current){
+          classes.push('current');
+        }
+        if(slide.isDone()){
+          classes.push('done');
+        }else{
+          classes.push('todo');
+        }
+        return(
+          <li onClick={_this.goTo.bind(_this, index + 1)} className={classes.join(' ')}><a>{index + 1}</a></li>
+        )
+      });
+      return (
+        <nav className="slides-nav">
+          <div className="overlay"></div>
+          <ol dir="rtl">
+            {nodes}
+          </ol>
+        </nav>
+      )
     }
   });
 
