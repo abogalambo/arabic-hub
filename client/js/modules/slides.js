@@ -30,7 +30,7 @@ var questionSlide = function(q){
   that.isQuestionSlide = true
   that.question = q;
   that.focus = function(){
-    this.question.focus();
+    return this.question.focus();
   }
   that.blur = function(){
     this.question.blur();

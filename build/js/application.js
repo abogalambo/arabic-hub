@@ -351,8 +351,8 @@ var initReact = function initReact() {
   var Element = React.createClass({
     displayName: 'Element',
 
-    play: function play(e) {
-      this.props.el.playAudio();
+    toggleAudio: function toggleAudio(e) {
+      quizActions.toggleAudio(this.props.el);
       e.stopPropagation();
     },
     render: function render() {
@@ -384,14 +384,14 @@ var initReact = function initReact() {
       if (el.hasAudio) {
         contents.push(React.createElement(
           'div',
-          { onClick: this.play, className: 'mdl-card__actions mdl-card--border' },
+          { onClick: this.toggleAudio, className: 'mdl-card__actions mdl-card--border' },
           React.createElement(
             'button',
             { className: 'mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored' },
             React.createElement(
               'i',
               { className: 'material-icons' },
-              'play_arrow'
+              el.isPlaying() ? 'pause' : 'play_arrow'
             )
           )
         ));
@@ -805,7 +805,7 @@ var mCquestion = function mCquestion(options) {
   that.answers = options.answers || [];
   that.focus = function () {
     if (this.question.hasAudio) {
-      this.question.playAudio();
+      return this.question.playAudio();
     }
   };
   that.blur = function () {
@@ -910,7 +910,7 @@ var questionSlide = function questionSlide(q) {
   that.isQuestionSlide = true;
   that.question = q;
   that.focus = function () {
-    this.question.focus();
+    return this.question.focus();
   };
   that.blur = function () {
     this.question.blur();

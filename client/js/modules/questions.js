@@ -8,7 +8,7 @@ var mCquestion = function(options){
   that.answers = options.answers || [];
   that.focus = function(){
     if(this.question.hasAudio){
-      this.question.playAudio();
+      return this.question.playAudio();
     }
   }
   that.blur = function(){
