@@ -411,15 +411,8 @@ var initReact = function initReact() {
   var SlidesNav = React.createClass({
     displayName: 'SlidesNav',
 
-    canNavigateTo: function canNavigateTo(index) {
-      var slides = this.props.slides;
-      var current = this.props.current;
-      return index <= current || slides[current].isDone();
-    },
     goTo: function goTo(index) {
-      if (this.canNavigateTo(index)) {
-        router.goTo('/slides/' + index);
-      }
+      router.goTo('/slides/' + index);
     },
     render: function render() {
       var _this = this;
