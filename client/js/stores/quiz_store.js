@@ -44,6 +44,11 @@ var stopAudio = function(audio){
 
 var answerQuestion = function(question,answer){
   question.answerWith(answer);
+  if(question.checkAnswer(answer)){
+    _state.quizAssets.sounds.correctAnswer.playAudio();
+  }else{
+    _state.quizAssets.sounds.wrongAnswer.playAudio();
+  }
 }
 
 var init = function(data){

@@ -585,6 +585,10 @@ var factory = {
       characters: {
         happy: this.createImage('characters/happy3.png'),
         sad: this.createImage('characters/sad1.png')
+      },
+      sounds: {
+        correctAnswer: this.createAudio('feedback/correct.mp3'),
+        wrongAnswer: this.createAudio('feedback/incorrect.mp3')
       }
     };
   },
@@ -987,6 +991,11 @@ var stopAudio = function stopAudio(audio) {
 
 var answerQuestion = function answerQuestion(question, answer) {
   question.answerWith(answer);
+  if (question.checkAnswer(answer)) {
+    _state.quizAssets.sounds.correctAnswer.playAudio();
+  } else {
+    _state.quizAssets.sounds.wrongAnswer.playAudio();
+  }
 };
 
 var init = function init(data) {

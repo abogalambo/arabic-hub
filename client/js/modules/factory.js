@@ -7,7 +7,11 @@ var factory = {
     return {
       characters: {
         happy: this.createImage('characters/happy3.png'),
-        sad: this.createImage('characters/sad1.png'),
+        sad: this.createImage('characters/sad1.png')
+      },
+      sounds: {
+        correctAnswer: this.createAudio('feedback/correct.mp3'),
+        wrongAnswer: this.createAudio('feedback/incorrect.mp3')
       }
     }
   },
