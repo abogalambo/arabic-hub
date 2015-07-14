@@ -808,7 +808,7 @@ var mCquestion = function mCquestion(options) {
   that.question = options.question;
   that.answers = options.answers || [];
   that.focus = function () {
-    if (this.question.hasAudio) {
+    if (this.question.hasAudio && !this.isAnswered()) {
       return this.question.playAudio();
     }
   };
