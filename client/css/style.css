@@ -145,6 +145,7 @@ li.node{
     margin: 0px 20px 0px 0px;
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 li.node::before{
@@ -161,7 +162,7 @@ li.node::before{
 li.node a{
 	position: relative;
   	bottom: 5px;
-  	color: #fff
+  	color: #fff;
 }
 
 li.node:first-child::before {
@@ -174,7 +175,6 @@ li.done {
 
 li.done a{
 	color: #fff;
-	cursor: pointer;
 }
 
 li.current{
