@@ -146,8 +146,10 @@ var initReact = function initReact() {
       };
       var content;
       var navigation;
+      var quizProgress;
       if (this.state.loaded) {
         navigation = React.createElement(SlidesNav, { slides: this.state.slides, current: this.state.current });
+        quizProgress = React.createElement(QuizProgress, { progress: parseInt(100 * (this.state.current + 1) / this.state.slides.length) });
         content = this.state.slides.map(function (slide, index) {
           return React.createElement(
             'div',
@@ -171,7 +173,8 @@ var initReact = function initReact() {
         'div',
         { className: 'quiz' },
         navigation,
-        content
+        content,
+        quizProgress
       );
     }
   });
@@ -267,6 +270,19 @@ var initReact = function initReact() {
           null,
           this.props.progress + '%'
         )
+      );
+    }
+  });
+
+  var QuizProgress = React.createClass({
+    displayName: 'QuizProgress',
+
+    render: function render() {
+      return React.createElement(
+        'div',
+        { className: 'bottom-progress mdl-progress' },
+        React.createElement('div', { className: 'progressbar bar bar1', style: { width: this.props.progress + '%' } }),
+        React.createElement('div', { className: 'bufferbar bar bar2', style: { width: '100%' } })
       );
     }
   });

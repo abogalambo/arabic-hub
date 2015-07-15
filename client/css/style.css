@@ -195,3 +195,16 @@ li.todo a{
 	cursor: default;
 }
 /*---------------------------- End slide navigation ----------------------*/
+
+/*-------- bottom progress bar --------*/
+.bottom-progress{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 3px;
+}
+
+.mdl-progress>.progressbar{
+	left: auto;
+	right:0;
+}

@@ -55,9 +55,13 @@ var initReact = function(){
       }
       var content;
       var navigation;
+      var quizProgress;
       if(this.state.loaded){
         navigation = (
           <SlidesNav slides={this.state.slides} current={this.state.current} />
+        );
+        quizProgress = (
+          <QuizProgress progress={parseInt(100 * (this.state.current + 1) / this.state.slides.length)} />
         );
         content = this.state.slides.map(function(slide, index){
           return (
@@ -80,6 +84,7 @@ var initReact = function(){
         <div className="quiz">
           {navigation}
           {content}
+          {quizProgress}
         </div>
       );
       
@@ -164,6 +169,17 @@ var initReact = function(){
       )
     }
   })
+
+  var QuizProgress = React.createClass({
+    render: function(){
+      return(
+        <div className="bottom-progress mdl-progress">
+          <div className="progressbar bar bar1" style={{width: this.props.progress + '%'}}></div>
+          <div className="bufferbar bar bar2" style={{width: '100%'}}></div>
+        </div>
+      )
+    }
+  });
 
   var Question = React.createClass({
     answerWith: function(answer){
