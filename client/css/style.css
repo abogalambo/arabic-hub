@@ -120,17 +120,11 @@ body, #root{
 	position: absolute;
   	width: 100%;
   	z-index: 100;
-}
-
-.slides-nav .overlay{
-	position: absolute;
-	background: rgba(0,0,0,0.2);
-	width: 100%;
-	height:35px;
+  	bottom: 0;
 }
 
 .slides-nav ol{
-	margin-top: 5px;
+	margin: 5px;
 	text-align: center;
 	display: block;
 }
@@ -199,12 +193,59 @@ li.todo a{
 /*-------- bottom progress bar --------*/
 .bottom-progress{
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	width: 100%;
-	height: 3px;
+	height: 2px;
 }
 
 .mdl-progress>.progressbar{
 	left: auto;
 	right:0;
+}
+
+
+/*----------------- Social icons ------------------*/
+.social-icons{
+	position: absolute;
+	z-index: 100;
+	right: 0;
+	top: 0px;
+	border-right: 0;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	/*background-color: rgba(0,0,0,0.2);*/	
+}
+
+.social-icons > div{
+	margin: 5px;
+	border: 1px solid white;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.social-icons > div > a{
+	width: 100%;
+	height: 100%;
+}
+
+.svg-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.svg-icon * {
+	fill: #C1C1C1;
+}
+
+.svg-icon circle {
+  stroke-width: 1;
+}
+
+.social-icons > div:hover{
+	border: 1px solid #3D85C6;
+	border-radius: 3px;
+}
+
+.social-icons > div:hover .svg-icon *{
+	fill: #3D85C6;
 }
