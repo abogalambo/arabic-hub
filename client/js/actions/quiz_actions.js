@@ -23,10 +23,11 @@ var QuizActions = {
     });
   },
 
-  init: function(data) {
+  init: function(data, nameSpace) {
     AppDispatcher.dispatch({
       actionType: 'Quiz:Init',
-      quizData: data
+      quizData: data.slides,
+      nameSpace: nameSpace
     });
   }
 };

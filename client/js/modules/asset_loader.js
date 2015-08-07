@@ -1,9 +1,10 @@
 var q = require('q');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var promises = [];
-var loaded = 0;
+var promises = {default:[]};
+var loaded = {default: 0};
 var LOADED_EVENT = 'AssetLoader:ResourceLoaded';
+var nameSpace = 'default'
 
 function loadAudio(url){
   // Load buffer asynchronously
@@ -55,8 +56,9 @@ function loadImage(url){
 
 // asset loader public API
 var assetLoader = assign({}, EventEmitter.prototype, {
-  addAsset: function(url, type){
+  addAsset: function(url, type, ns){
     var promise;
+    ns = ns || nameSpace;
     var _this = this;
     if(type == 'audio'){
       promise = loadAudio(url);
@@ -64,10 +66,12 @@ var assetLoader = assign({}, EventEmitter.prototype, {
       promise = loadImage(url);
     }
     promise.then(function(){
-      loaded ++;
-      _this.emit(LOADED_EVENT, loaded, promises.length);
+      loaded[ns] = loaded[ns] || 0;
+      loaded[ns] ++;
+      _this.emit(LOADED_EVENT, loaded[ns], promises[ns].length);
     });
-    promises.push(promise);
+    promises[ns] = promises[ns] || [];
+    promises[ns].push(promise);
     return promise;
   },
 
@@ -76,7 +80,22 @@ var assetLoader = assign({}, EventEmitter.prototype, {
   },
 
   load: function(){
-    return q.allSettled(promises)
+    if(arguments.length == 0)
+      return q.allSettled(promises[nameSpace]);
+
+    if(arguments.length == 1)
+      return q.allSettled(promises[arguments[0]]);
+
+    var nameSpaces = Array.prototype.slice.call(arguments);
+    var toLoad = [];
+    for(var i=0; i<arguments.length; i++){
+      toLoad = toLoad.concat(promises[arguments[i]])
+    }
+    return q.allSettled(toLoad);
+  },
+
+  setNameSpace: function(ns){
+    nameSpace = ns;
   }
 });
 

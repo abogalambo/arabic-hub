@@ -4,6 +4,7 @@ var assign = require('object-assign');
 var assetLoader = require('../modules/asset_loader.js');
 var factory = require('../modules/factory');
 var q = require('q');
+var quizAssets;
 
 var CHANGE_EVENT = 'Quiz:Change';
 
@@ -33,9 +34,9 @@ var goToSlide = function(index){
 }
 
 var playAudio = function(audio){
-    audio.playAudio().then(function(){
-      QuizStore.emitChange();
-    });
+  audio.playAudio().then(function(){
+    QuizStore.emitChange();
+  });
 }
 
 var stopAudio = function(audio){
@@ -51,9 +52,12 @@ var answerQuestion = function(question,answer){
   }
 }
 
-var init = function(data){
+var init = function(data, nameSpace){
+
+  assetLoader.setNameSpace(nameSpace);
   var slides = factory.createSlides(data);
-  var quizAssets = factory.createQuizAssets();
+  var quizAssets = quizAssets || factory.createQuizAssets();
+
   assetLoader.load().then(function(){
     _state.slides = slides;
     _state.max = Math.max(slides.length - 1, 0);
@@ -117,7 +121,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case 'Quiz:Init':
-      init(action.quizData);
+      init(action.quizData, action.nameSpace);
       QuizStore.emitChange();
       break;
 
